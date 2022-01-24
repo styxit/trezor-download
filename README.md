@@ -1,8 +1,8 @@
 # trezor-download
-Tool to download and verify the signature of Trezor suite install files.
+Tool to download and verify the signature of Trezor suite install files. Uses gpg to verify the downloaded binary has been signed with the SatoshiLabs key.
 
 # Usage
-To download the file that matches you platform, you must provide a this as an argument.
+To download the file that matches you platform, you must provide this as an argument.
 
 | Platform     | Argument  |
 | ------------ | --------- |

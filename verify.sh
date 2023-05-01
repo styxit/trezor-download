@@ -79,7 +79,7 @@ echo ""
 echo "Download Trezor binary from GitHub"
 echo "URL: $binary_url"
 echo -e "This file is ${YELLOW}$binary_size${NC}. Might take a while depending on your internet connection."
-curl --silent -L $binary_url > "$binary_file"
+curl --progress-bar -L $binary_url > "$binary_file"
 
 echo ""
 echo "Download signature from GitHub"

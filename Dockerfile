@@ -1,5 +1,6 @@
 FROM alpine:latest
 RUN apk add --no-cache gnupg curl jq
+RUN apk add --no-cache gum
 
 WORKDIR /
 

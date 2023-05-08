@@ -19,17 +19,20 @@ platform_keys=$(echo $platforms | jq -r ' keys | join(" ")')
     then echo -e "${RED}No volumne mounted!${NC} Make sure to run the container with a mount, so the downloaded file is available on the host. Start docker container with '-v \${PWD}/downloads:/downloads'"
     exit
 fi
-# Check wanted platform. This must be provided as argument when starting the container.
-if [ $# -eq 0 ]
-  then
-    echo -e "${RED}The platform arguments is missing!${NC} When starting the container provide one of the following platforms: mac, mac-arm, win, linux, linux-arm"
-    exit
+
+# Ask for platform when no platform is provided.
+if [ -z "$1" ] || [ "$1" == "null" ]
+then
+    # Ask for platform.
+    echo -e "Select your ${YELLOW}platform${NC}"
+    platform_input=$(gum choose $platform_keys)
+else
+    # Use platform from provided commandline argument
+    platform_input=$1
 fi
 
-# Define available platforms.
-platforms='{"win":"win-x64.exe","mac":"mac-x64.dmg","mac-arm":"mac-arm64.dmg","linux":"linux-x86_64.AppImage","linux-arm":"linux-arm64.AppImage"}'
-# Get platform based on provided argument.
-platform=$(echo "$platforms" | jq -r  --arg selector "$1" '.[$selector]')
+# Get platform binary name based on provided argument.
+platform=$(echo "$platforms" | jq -r  --arg selector "$platform_input" '.[$selector]')
 
 # Quit when invalid platform is provided.
 if [ -z "$platform" ] || [ "$platform" = "null" ]
@@ -40,8 +43,7 @@ fi
 ####################################################################
 # Show selected platfom and binary name.
 ####################################################################
-echo ""
-echo "Selected platform: ${1}"
+echo -e "Selected platform: ${YELLOW}${platform_input}${NC}"
 echo "Corresponding binary name: ${platform}"
 echo ""
 
@@ -83,11 +85,13 @@ echo "Download Trezor binary from GitHub"
 echo "URL: $binary_url"
 echo -e "This file is ${YELLOW}$binary_size${NC}. Might take a while depending on your internet connection."
 curl --progress-bar -L $binary_url > "$binary_file"
+echo -e "${GREEN}Complete${NC}"
 
 echo ""
 echo "Download signature from GitHub"
 echo "URL: $signature_url"
 curl --silent -L $signature_url > "$signature_file"
+echo -e "${GREEN}Complete${NC}"
 
 ####################################################################
 # Download signing key from trezor website.
@@ -97,6 +101,7 @@ echo "Download SatoshiLabs signing key from Trezor.io domain."
 key_url=https://trezor.io/security/satoshilabs-2021-signing-key.asc 
 echo "URL: $key_url"
 curl --silent -L $key_url > signing-key.asc
+echo -e "${GREEN}Complete${NC}"
 
 ####################################################################
 # Import signing key and verify downloaded files.

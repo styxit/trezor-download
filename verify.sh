@@ -1,11 +1,14 @@
 #!/bin/sh
 
-echo ""
 # Define text colors.
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
+
+# Define available platforms.
+platforms='{"win":"win-x64.exe","mac":"mac-x64.dmg","mac-arm":"mac-arm64.dmg","linux":"linux-x86_64.AppImage","linux-arm":"linux-arm64.AppImage"}'
+platform_keys=$(echo $platforms | jq -r ' keys | join(" ")')
 
 ####################################################################
 # Validate arguments. Valid platform and volume mount.

@@ -1,4 +1,5 @@
-FROM alpine:latest
+FROM alpine:3
+
 RUN apk add --no-cache gnupg curl jq
 RUN apk add --no-cache gum
 
